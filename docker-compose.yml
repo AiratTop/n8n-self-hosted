@@ -27,6 +27,7 @@ x-n8n-common-env: &n8n-common-env
   EXECUTIONS_DATA_PRUNE: true
   # --- Security & Customization ---
   N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
+  N8N_RESTRICT_FILE_ACCESS_TO: /files
   N8N_GIT_NODE_DISABLE_BARE_REPOS: true
   N8N_BLOCK_ENV_ACCESS_IN_NODE: true
   NODES_EXCLUDE: "[]"
