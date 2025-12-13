@@ -129,7 +129,7 @@ services:
   n8n-master:
     container_name: n8n-master
     hostname: n8n-master
-    image: n8nio/n8n:${N8N_VERSION:-latest}
+    image: n8nio/n8n:${N8N_VERSION:-stable}
     networks:
       - shared_network
     restart: always
@@ -145,7 +145,7 @@ services:
       n8n-redis:
         condition: service_healthy
   n8n-worker:
-    image: n8nio/n8n:${N8N_VERSION:-latest}
+    image: n8nio/n8n:${N8N_VERSION:-stable}
     networks:
       - shared_network
     restart: always
