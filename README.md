@@ -40,6 +40,7 @@ This repository provides a Docker Compose setup for running a self-hosted [n8n](
 
 3.  **Configure the environment:**
     Open the `.env` file and update the variables with your own settings.
+    You can use my Open Source [password generator](https://pass.airat.top) to create a strong password.
 
 4.  **Start the application:**
     ```bash
