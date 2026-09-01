@@ -102,13 +102,17 @@ Check out these pre-configured services that work out-of-the-box with this n8n i
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The original Docker Compose files, configuration, scripts, and documentation in this repository
+are licensed under the [Apache License 2.0](LICENSE), with copyright details in [NOTICE](NOTICE).
+
+Docker images and third-party software referenced by this deployment template are not covered by
+this license. They remain subject to their respective licenses and terms.
 
 ---
 
 ## Author
 
-**AiratTop**
+**AiratTop (Airat Halitov)**
 
 - Website: [airat.top](https://airat.top)
 - GitHub: [@AiratTop](https://github.com/AiratTop)
