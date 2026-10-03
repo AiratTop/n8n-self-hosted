@@ -33,7 +33,14 @@ x-n8n-common-env: &n8n-common-env
   NODES_EXCLUDE: "[]"
   # Performance tuning.
   N8N_RUNNERS_ENABLED: true
-  N8N_RUNNERS_MAX_CONCURRENCY: 10
+  # Code nodes in one runner execute one at a time (single JS thread); extra slots only
+  # add parallel memory use. Keep equal to the worker --concurrency below.
+  N8N_RUNNERS_MAX_CONCURRENCY: 5
+  # Cap the task runner's V8 heap (MiB): an oversized Code node input fails that task
+  # instead of exhausting host RAM. Lower it on small hosts (e.g. 512 for 2 GB RAM).
+  N8N_RUNNERS_MAX_OLD_SPACE_SIZE: 1024
+  # Code node task timeout, seconds. The default is planned to drop to 60; pin it.
+  N8N_RUNNERS_TASK_TIMEOUT: 300
   OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: true
   # --- SMTP ---
   N8N_EMAIL_MODE: smtp
@@ -58,6 +65,14 @@ x-n8n-common-env: &n8n-common-env
   # Enable n8n /metrics, /healthz and /healthz/readiness endpoints
   N8N_METRICS: true
   QUEUE_HEALTH_CHECK_ACTIVE: true
+  # n8n 2.x evaluates expressions in an isolated VM by default ('vm'). It is stricter, but
+  # per-item expressions ({{ }} in Set, If, database nodes) run 3-5x slower than in 1.x
+  # and block the worker longer. 'legacy' is the 1.x in-process evaluator.
+  # Remove this line to keep the 'vm' isolation, e.g. if untrusted users can edit workflows.
+  N8N_EXPRESSION_ENGINE: legacy
+  # n8n 2.x hardcodes maxStalledCount=0: if a worker's event loop is blocked longer than
+  # the job lock, all its running jobs fail with "job stalled". The default lock is 60 s.
+  QUEUE_WORKER_LOCK_DURATION: 600000   # 10 min
 
 name: n8n
 services:
@@ -150,7 +165,7 @@ services:
       - shared_network
     restart: always
     environment: *n8n-common-env
-    command: worker --concurrency=10
+    command: worker --concurrency=5
     volumes:
       - ./data/n8n:/home/node/.n8n
       - ./local_files:/files
